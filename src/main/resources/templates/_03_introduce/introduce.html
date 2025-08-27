@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>post</title>
+</head>
+<body>
+    <form action="/post/introduce1" method="POST">
+        <label for="name">이름:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
+
+        성별:
+        <input type="radio" id="male" name="gender" value="남자" required>
+        <label for="male">남자</label>
+        <input type="radio" id="female" name="gender" value="여자">
+        <label for="female">여자</label>
+        <br><br>
+
+        생년월일:
+        <select name="year">
+            <script>
+                for(let y=1950; y<=2025; y++){
+                    document.write(`<option value="${y}">${y}</option>`);
+                }
+            </script>
+        </select>년
+        <select name="month">
+            <script>
+                for(let m=1; m<=12; m++){
+                    document.write(`<option value="${m}">${m}</option>`);
+                }
+            </script>
+        </select>월
+        <select name="day">
+            <script>
+                for(let d=1; d<=31; d++){
+                    document.write(`<option value="${d}">${d}</option>`);
+                }
+            </script>
+        </select>일
+        <br><br>
+
+        관심사:
+        <input type="checkbox" name="interest" value="여행">여행
+        <input type="checkbox" name="interest" value="패션">패션
+        <input type="checkbox" name="interest" value="음식">음식
+        <input type="checkbox" name="interest" value="운동">운동
+        <br><br>
+
+        <button type="submit">회원가입</button>
+    </form>
+</body>
+</html>

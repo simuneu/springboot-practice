@@ -2,9 +2,7 @@ package spring.spring_boot_default.controller._02_restapi;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class RestController {
@@ -73,5 +71,47 @@ public class RestController {
         model.addAttribute("age", age);
 
         return "_02_restapi/res";
+    }
+
+    //#5
+    @PostMapping("/post/res1")
+    public String postRes1(@RequestParam String name, @RequestParam int age, Model model){
+        System.out.println("name="+name);
+        System.out.println("age="+age);
+
+        model.addAttribute("name", name);
+        model.addAttribute("age", age);
+
+        return "_02_restapi/res";
+    }
+
+    //#6
+    @PostMapping("/post/res2")
+    public String postRes2(@RequestParam String name,
+                           @RequestParam(required = false) Integer age, Model model){
+        System.out.println("name="+name);
+        System.out.println("age="+age);
+
+        model.addAttribute("name", name);
+        model.addAttribute("age", age);
+
+        return "_02_restapi/res";
+    }
+
+    //#7
+    //1-6까지는 template view를 반환했지만 api서버를 활용, 데이터 자체를 응답하고자 한다면?
+    @PostMapping("/post/res3")
+    @ResponseBody //메서드의 반환값을 응답 본문(response body)에 직접 쓰도록 지시
+    public String PostRes3(@RequestParam String name, @RequestParam int age, Model model){
+        //응답 시 객체를 JSON으로 리턴할 때 사용
+        //즉 응답 객체를 전달(node express res.send()와 유사
+        System.out.println("name="+name);
+        System.out.println("age="+age);
+
+        model.addAttribute("name", name);
+        model.addAttribute("age", age);
+
+        //문자열 그 자체를 응답
+        return name+" "+age;
     }
 }
