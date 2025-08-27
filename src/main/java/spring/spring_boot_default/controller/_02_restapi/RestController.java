@@ -3,6 +3,8 @@ package spring.spring_boot_default.controller._02_restapi;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import spring.spring_boot_default.dto.UserDTO;
+import spring.spring_boot_default.vo.UserVO;
 
 @Controller
 public class RestController {
@@ -113,5 +115,99 @@ public class RestController {
 
         //문자열 그 자체를 응답
         return name+" "+age;
+    }
+
+    //#8
+    @GetMapping("/dto/res1")
+    @ResponseBody
+    //req ex /dto/res1?name=lee&age=1
+    // @ModelAttribute UserDTO userDTO
+    // 요청 파라미터를 DTO 객체에 바인딩
+    // 폼 input name속성들(name, age)이 userDTO 필드명과  일치하면 자동 매핑
+    // 매핑 dto의 setter사용
+    // ?name=s&age=1 > setName("s"), setAge(1)
+    public String dtoRes1(@ModelAttribute UserDTO userDTO) {
+        System.out.println("[GET] userDTO (name) = "+userDTO.getName());
+        System.out.println("[GET] userDTO (age) = "+userDTO.getAge());
+
+        return userDTO.getName()+" "+userDTO.getAge();
+    }
+
+    //#9
+    @PostMapping("/dto/res2")
+    @ResponseBody
+    /*
+    * @ModelAttribute 어노테이션 생략 가능
+    * 파라미터의 UserDTO 타입 앞에 아무것도 없으면 @ModelAttribute자동 추가
+    * POST 방식이므로 폼 데이터를 자동으로 UserDTO에 바인딩
+    * */
+    public String dtoRes2(UserDTO userDTO) {
+        System.out.println("[POST] userDTO (name) = "+userDTO.getName());
+        System.out.println("[POST] userDTO (age) = "+userDTO.getAge());
+
+        return userDTO.getName()+" "+userDTO.getAge();
+    }
+
+    //#10
+    @PostMapping("/dto/res3")
+    @ResponseBody
+    public String dtoRes22(@RequestBody UserDTO userDTO) {
+        /*
+        * @RequestBody어노테이션
+        * 요청의 본문(req.body)에 있는 데이터를 읽어와서 객체에 매핑
+        * 매핑? 필드에 값을 주입
+        * 반환 값을 HTTP본문에 직접 작설
+        * 단 요청의 형식이 JSON 또는 XML일 때(지금은 일반 폼 전송)
+        * 415에러 : 서버가 클라이언트로부터 받은 요청의 미디어타입을 지원하지 않거나 이해할 수 없는 경우 발생
+        * 즉 해당 요청은 MIME Type이 application/x-www-form-urlencoded
+        * @RequestBody어노테이션 사용시 오류 발생
+        * 오류가 안나려면?
+        * @ModelAttribute 사용
+        * 클라이언트 측에서 js코드를 사용해 폼데이터를 json변환하여 전송 > 동적 폼 전송
+        * */
+        System.out.println("[POST] userDTO (name) = "+userDTO.getName());
+        System.out.println("[POST] userDTO (age) = "+userDTO.getAge());
+
+        return userDTO.getName()+" "+userDTO.getAge();
+    }
+
+    //#11
+    @GetMapping("/vo/res1")
+    @ResponseBody
+    public String voRes1(@ModelAttribute UserVO userVO) {
+        /*
+        * @ModelAttribute UserVO userVO - 요청파라미터를 VO객체에 바인딩
+        * 브라우저에서 응답이 null과 0으로 도착하는 이유?
+        * @ModelAttribute는 Setter를 이용해 객체에 값을 주입 > VO는 Setter가 없음
+        * 즉 폼에서 전송된 데이터가 주입되지 않음. name, age필드는 초기화되지 않은 상태인 null과 0으로 남게 됨
+        * */
+        System.out.println("[GET] userVO(name)= " + userVO.getName());
+        System.out.println("[GET] userVO(age)= " + userVO.getAge());
+        return userVO.getName() + " " + userVO.getAge();
+    }
+
+    // #12
+    @PostMapping("/vo/res2")
+    @ResponseBody
+    public String voRes2(UserVO userVO) {
+    //@ModelAttribute가 생략되어 기본으로 있어도 VO는 setter가 없어 앞의 이유로 null과 0
+        System.out.println("[POST] userVO(name)= " + userVO.getName());
+        System.out.println("[POST] userVO(age)= " + userVO.getAge());
+        return userVO.getName() + " " + userVO.getAge();
+    }
+
+    // #13
+    @PostMapping("/vo/res3")
+    @ResponseBody
+    public String voRes3(@RequestBody UserVO userVO) {
+        /*
+        * @RequestBody UserVO userVO > 요청 본문 데이터를 vo객체로 변환 시도
+        * #10과 동일한 이유
+        * 올바르게 사용하려면 @RequestBody제거 후 @ModelAttribute사용 혹은
+        * 클라이언트 픅에서 js를 이용해 동적 폼 전송 구현
+        * */
+        System.out.println("[POST] userVO(name)= " + userVO.getName());
+        System.out.println("[POST] userVO(age)= " + userVO.getAge());
+        return userVO.getName() + " " + userVO.getAge();
     }
 }
