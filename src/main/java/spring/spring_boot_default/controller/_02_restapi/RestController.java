@@ -156,7 +156,7 @@ public class RestController {
         * @RequestBody어노테이션
         * 요청의 본문(req.body)에 있는 데이터를 읽어와서 객체에 매핑
         * 매핑? 필드에 값을 주입
-        * 반환 값을 HTTP본문에 직접 작설
+        * 반환 값을 HTTP본문에 직접 작성
         * 단 요청의 형식이 JSON 또는 XML일 때(지금은 일반 폼 전송)
         * 415에러 : 서버가 클라이언트로부터 받은 요청의 미디어타입을 지원하지 않거나 이해할 수 없는 경우 발생
         * 즉 해당 요청은 MIME Type이 application/x-www-form-urlencoded
@@ -209,5 +209,98 @@ public class RestController {
         System.out.println("[POST] userVO(name)= " + userVO.getName());
         System.out.println("[POST] userVO(age)= " + userVO.getAge());
         return userVO.getName() + " " + userVO.getAge();
+    }
+
+    //#14
+    @GetMapping("/axios/res1")
+    @ResponseBody
+    public String axiosRes1(@RequestParam String name, @RequestParam String age){
+        System.out.println("[GET]axios(name)="+name);
+        System.out.println("[GET]axios(age)="+age);
+        return "이름 : "+name+", 나이 : "+age;
+    }
+
+    //#15
+    @GetMapping("/axios/res2")
+    @ResponseBody
+    public String axiosRes2(UserDTO userDTO){
+        System.out.println("[GET]axios and dto(name)="+userDTO.getName());
+        System.out.println("[GET]axios and dto(age)="+userDTO.getAge());
+
+        return "이름 : "+userDTO.getName()+", 나이 : "+userDTO.getAge();
+    }
+
+    //#16
+    @PostMapping("/axios/res3")
+    @ResponseBody
+    public String axiosRes3(@RequestParam String name, @RequestParam String age){
+        System.out.println("[POST]axios(name)="+name);
+        System.out.println("[POST]axios(age)="+age);
+        return "이름 : "+name+", 나이 : "+age;
+    }
+
+    //#17
+    @PostMapping("/axios/res4")
+    @ResponseBody
+    public String axiosRes4(UserDTO userDTO){
+        System.out.println("[POST]axios and dto(name)="+userDTO.getName());
+        System.out.println("[POST]axios and dto(age)="+userDTO.getAge());
+
+        return "이름 : "+userDTO.getName()+", 나이 : "+userDTO.getAge();
+    }
+
+    //#18
+    @PostMapping("/axios/res5")
+    @ResponseBody
+    public String axiosRes5(@RequestBody UserDTO userDTO){
+        System.out.println("[POST]axios and dto(name)="+userDTO.getName());
+        System.out.println("[POST]axios and dto(age)="+userDTO.getAge());
+
+        return "이름 : "+userDTO.getName()+", 나이 : "+userDTO.getAge();
+    }
+
+    /// ////////////vo
+    //#1
+    @GetMapping("/axios/vo/res1")
+    @ResponseBody
+    public String axiosVoRes1(@RequestParam String name, @RequestParam String age){
+        System.out.println("[GET]axios(name)="+name);
+        System.out.println("[GET]axios(age)="+age);
+        return "이름 : "+name+", 나이 : "+age;
+    }
+    //#2
+    @GetMapping("/axios/vo/res2")
+    @ResponseBody
+    public String axiosRes2(UserVO userVO){
+        System.out.println("[GET]axios and vo(name)="+userVO.getName());
+        System.out.println("[GET]axios and vo(age)="+userVO.getAge());
+
+        return "이름 : "+userVO.getName()+", 나이 : "+userVO.getAge();
+    }
+    //#3
+    @PostMapping("/axios/vo/res3")
+    @ResponseBody
+    public String axiosVoRes3(@RequestParam String name, @RequestParam String age){
+        System.out.println("[POST]axios(name)="+name);
+        System.out.println("[POST]axios(age)="+age);
+        return "이름 : "+name+", 나이 : "+age;
+    }
+    //#4
+    @PostMapping("/axios/vo/res4")
+    @ResponseBody
+    public String axiosVoRes4(UserVO userVO){
+        System.out.println("[POST]axios and vo(name)="+userVO.getName());
+        System.out.println("[POST]axios and vo(age)="+userVO.getAge());
+
+        return "이름 : "+userVO.getName()+", 나이 : "+userVO.getAge();
+    }
+    //#5
+    @PostMapping("/axios/vo/res5")
+    @ResponseBody
+    public String axiosVoRes5(@RequestBody UserVO userVO){
+        System.out.println("[POST]axios and vo(name)="+userVO.getName());
+        System.out.println("[POST]axios and vo(age)="+userVO.getAge());
+
+        return "이름 : "+userVO.getName()+", 나이 : "+userVO.getAge();
     }
 }
