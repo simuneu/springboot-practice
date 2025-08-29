@@ -211,7 +211,8 @@ public class RestController {
         return userVO.getName() + " " + userVO.getAge();
     }
 
-    //#14
+    ////////////////////////
+    //#14-1
     @GetMapping("/axios/res1")
     @ResponseBody
     public String axiosRes1(@RequestParam String name, @RequestParam String age){
@@ -220,39 +221,55 @@ public class RestController {
         return "이름 : "+name+", 나이 : "+age;
     }
 
-    //#15
+    //#14-2
     @GetMapping("/axios/res2")
     @ResponseBody
     public String axiosRes2(UserDTO userDTO){
+        /*UserDTO객체를 파라미터로 받아 자동으로 데이터 바인딩
+        * DTO를 사용하여 데이터 캡슐화
+        * 14-1 폼 대비 DTO를 사용하니 코드가 깔끔해지고 데이터 구조를 쉽게 확장*/
         System.out.println("[GET]axios and dto(name)="+userDTO.getName());
         System.out.println("[GET]axios and dto(age)="+userDTO.getAge());
 
         return "이름 : "+userDTO.getName()+", 나이 : "+userDTO.getAge();
     }
 
-    //#16
+    //#15 error 발생 코드
     @PostMapping("/axios/res3")
     @ResponseBody
     public String axiosRes3(@RequestParam String name, @RequestParam String age){
+        /*에러발생 이유 :
+         * 클라이언트에서는 데이터를 객체로 전송랬지만 서버에서는 @RequestParam으로 받으려고 함
+         * axios는 기본적으로 json형식으로 전송
+         * 하지만 서버측 코드는 @RequestParam을 사용해 데이터를 받아서 에러남
+         * */
         System.out.println("[POST]axios(name)="+name);
         System.out.println("[POST]axios(age)="+age);
         return "이름 : "+name+", 나이 : "+age;
     }
 
-    //#17
+    //#15-2
     @PostMapping("/axios/res4")
     @ResponseBody
     public String axiosRes4(UserDTO userDTO){
+       /*@RequestParam어노테이션 없이 UserDTO객체로 파라미터를 받고자한 코드
+       * json데이터가 요청의 본문에 있지만 @RequestBody 없는 UserDTO는 주로 폼 데이터나 쿼리 파라미터를 바인딩하는데 사용
+       * 즉 @ResponseBody어노테이션이 없으면 Spring은 JSON 요청 본문을 자동으로  UserDTO에 바인딩 해주지 않음
+       * */
         System.out.println("[POST]axios and dto(name)="+userDTO.getName());
         System.out.println("[POST]axios and dto(age)="+userDTO.getAge());
 
         return "이름 : "+userDTO.getName()+", 나이 : "+userDTO.getAge();
     }
 
-    //#18
+    //#15-3
     @PostMapping("/axios/res5")
     @ResponseBody
     public String axiosRes5(@RequestBody UserDTO userDTO){
+        /*15-2의 해결책
+        * @ResponseBody UserDTO 코드가 요청 본문의 json데이터를 UserDTO객체로 직접 매핑
+        * RESTful API설계에 적합하며 클라이언트- 서버 간 데이터 교환을 명확하게 함.
+        * */
         System.out.println("[POST]axios and dto(name)="+userDTO.getName());
         System.out.println("[POST]axios and dto(age)="+userDTO.getAge());
 
@@ -260,7 +277,8 @@ public class RestController {
     }
 
     /// ////////////vo
-    //#1
+    ///
+    //#16-1
     @GetMapping("/axios/vo/res1")
     @ResponseBody
     public String axiosVoRes1(@RequestParam String name, @RequestParam String age){
@@ -268,27 +286,42 @@ public class RestController {
         System.out.println("[GET]axios(age)="+age);
         return "이름 : "+name+", 나이 : "+age;
     }
-    //#2
+    //#16-2
     @GetMapping("/axios/vo/res2")
     @ResponseBody
     public String axiosRes2(UserVO userVO){
+        /*
+        * @ModelAttribute 어노테이션 생략
+        * 해당 어노테이션은 setter를 통해 객체에 값을 주입
+        * vo객체에는 setter 없으니 데이터 바인딩이 제대로 이뤄지지 않음
+        * 그러므로 모든 필드가 기본값으로 초기화
+        * */
         System.out.println("[GET]axios and vo(name)="+userVO.getName());
         System.out.println("[GET]axios and vo(age)="+userVO.getAge());
 
         return "이름 : "+userVO.getName()+", 나이 : "+userVO.getAge();
     }
-    //#3
+    //#17-1
     @PostMapping("/axios/vo/res3")
     @ResponseBody
     public String axiosVoRes3(@RequestParam String name, @RequestParam String age){
+        /*
+        * @RequestParam
+        * 주로 application/x-www-form-urlencoded혈식의 데이터를 처리하는데 사용되는 어노테이션
+        * 현태 프론트에서는 json형식으로
+        * */
         System.out.println("[POST]axios(name)="+name);
         System.out.println("[POST]axios(age)="+age);
         return "이름 : "+name+", 나이 : "+age;
     }
-    //#4
+    //#17-2
     @PostMapping("/axios/vo/res4")
     @ResponseBody
     public String axiosVoRes4(UserVO userVO){
+        /*
+        * @ModelAttribute생략
+        * setter를 통해 객체에 값을 주입하나 vo객체에는 setter가 존재하지 않으므로 데이터 바인딩이 안됨
+        * */
         System.out.println("[POST]axios and vo(name)="+userVO.getName());
         System.out.println("[POST]axios and vo(age)="+userVO.getAge());
 
@@ -298,6 +331,12 @@ public class RestController {
     @PostMapping("/axios/vo/res5")
     @ResponseBody
     public String axiosVoRes5(@RequestBody UserVO userVO){
+        /*RequestBody
+        * json형식의 본문을 UserVO객체로 올바르게 변환하도록 함
+        * @ModelAttribute vs @RequestBody
+        * @ModelAttribute : setter 함수를 실행해서 값을 넣음
+        * @RequestBody는 setter를 사용하지 않고도 각 필드에 직접 접근해서 값을 주입.
+        * */
         System.out.println("[POST]axios and vo(name)="+userVO.getName());
         System.out.println("[POST]axios and vo(age)="+userVO.getAge());
 
