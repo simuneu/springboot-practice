@@ -19,3 +19,17 @@ insert into users(username, email) values
     ('kim', 'kim@example.com');
 
 select *from users;
+
+drop table if exists board;
+create table board(
+    id bigint auto_increment primary key not null,
+    title varchar(20) not null,
+    content varchar(100) not null,
+    writer varchar(10) not null,
+    registered timestamp default current_timestamp
+);
+
+insert into board(title, content, writer) values
+    ('one', '첫 번째 글~~', 'papam'),
+    ('two', '둘 글~', 'momong'),
+    ('three', '셋 글~!', 'lily');

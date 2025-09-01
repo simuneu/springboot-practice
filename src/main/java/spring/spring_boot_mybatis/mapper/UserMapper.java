@@ -18,6 +18,7 @@ public interface UserMapper {
     User findById(Long id);
 
     @Insert("INSERT INTO users(username, email) values(#{username}, #{email})")
+
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(User user);
     //insert 작업에 대한 추가 옵션 설정
