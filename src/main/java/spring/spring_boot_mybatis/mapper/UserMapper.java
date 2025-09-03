@@ -11,7 +11,7 @@ public interface UserMapper {
     //간단한 쿼리의 경우 간결하게 표현
     //Java코드 내 SQL문을 직접 볼 수 있어 즉각적 이해 가능
     // @select @insert @update @delete어노테이션 사용
-    @Select("SELECT *FROM users")
+   /* @Select("SELECT *FROM users")
     List<User> findAll();
 
     @Select("SELECT * FROM users where id = #{id}")
@@ -33,9 +33,19 @@ public interface UserMapper {
 
 
     @Delete("DELETE FROM users WHERE id = #{id}")
-    void delete(Long id);
+    void delete(Long id);*/
 
 
     //2. XML기반 매퍼
+    /*복잡한 SQL 쿼리를 쉽게 관리
+    * 동적 SQL작성 편리
+    * SQL과 Java코드를 분리하여 관리
+    * 대규모 프로젝트나 복잡한 데이터를 조작하는데 적합
+    */
+    List<User> findAll();
+    User findById(Long id);
+    void insert(User user);
+    void update(User user);
+    void delete(Long id);
 
 }

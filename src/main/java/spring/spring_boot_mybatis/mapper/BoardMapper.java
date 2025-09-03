@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface BoardMapper {
-    @Select("SELECT * FROM board")
+ /*   @Select("SELECT * FROM board")
     List<Board> findAll();
 
     @Select("SELECT * FROM board WHERE writer = #{writer}")
@@ -22,5 +22,12 @@ public interface BoardMapper {
 
     @Insert("INSERT INTO board(title, content, writer) values(#{title}, #{content}, #{writer})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
+    void insert(Board board);*/
+
+    List<Board> findAll();
+    Board findByWriter(String writer);
+    void update(Board board);
+    void delete (int id );
     void insert(Board board);
+
 }
