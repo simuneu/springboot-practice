@@ -69,4 +69,23 @@ public class TodoController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+    
+    @GetMapping
+    public ResponseEntity<?> retrieveTodoList(){
+        //임시유저 하드코딩, 추후 수정 필요
+        String temporaryUserId = "temporary-user";
+        
+        //1. 서비스 계층의 retrieve메서드를 사용해 투두리스트를 가져오기
+        List<TodoEntity> entities = service.retrieve(temporaryUserId);
+        //2. 리턴된 엔티티 리스트를 todoDTO리스트로 변환
+        List<TodoDTO> dtos = new ArrayList<>();
+        for(TodoEntity tEntity : entities){
+            TodoDTO tDto = new TodoDTO(tEntity);
+            dtos.add(tDto);
+        }
+        //3. 변환된 todoDTO를 리스트를 이용해 responseDTO로 초기화
+        ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().data(dtos).build();
+        //4. ResponseDTO리턴
+        return ResponseEntity.ok().body(response);
+    }
 }
