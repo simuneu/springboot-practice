@@ -1,8 +1,10 @@
 package spring.spring_boot_security.controller;
 
+import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import spring.spring_boot_security.dto.ResponseDTO;
 import spring.spring_boot_security.dto.TodoDTO;
@@ -10,6 +12,7 @@ import spring.spring_boot_security.entity.TodoEntity;
 import spring.spring_boot_security.service.TodoService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -94,5 +97,37 @@ public class TodoController {
         ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().data(dtos).build();
         //4. ResponseDTO리턴
         return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTodo(@AuthenticationPrincipal String userId, @PathVariable Long id, @RequestBody TodoDTO dto){
+        try{
+            dto.setId(id);
+            TodoEntity updateEntity = service.update(dto);
+            TodoDTO updateDTO = new TodoDTO(updateEntity);
+            return ResponseEntity.ok().body(updateDTO);
+
+        } catch (Exception e) {
+            String error = e.getMessage();
+            ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().error(error).build();
+            //badRequest():400 에러 응답을 전송
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public  ResponseEntity<?> deleteTodo(@AuthenticationPrincipal String userId, @PathVariable Long id){
+        try{
+            TodoDTO dto = service.delete(userId, id);
+            ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder()
+                    .data(Collections.singletonList(dto))
+                    .build();
+            return ResponseEntity.ok().body(response);
+
+        }catch (Exception e){
+            String error = e.getMessage();
+            ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().error(error).build();
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 }
