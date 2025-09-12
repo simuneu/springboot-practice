@@ -4,7 +4,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import spring.spring_boot_security.config.jwt.JwtProperties;
 import spring.spring_boot_security.entity.UserEntity;
 
 import java.time.Instant;
@@ -16,8 +18,11 @@ import java.util.Date;
 @Slf4j
 public class TokenProvider {
     //jwt서명에 사용되는 비밀키로 지금은 하드코딩
-    private static final String SECRET_KEY="secret0001";
+//    private static final String SECRET_KEY="secret0001";
 
+    //[after] JwtProperties클래스 이용해 설정 파일 값 가벼오기
+    @Autowired
+    private JwtProperties jwtProperties;
     //create(): 로그인 성공 시에 이 메서드가 호출되어 jwt토큰을 발급함
     public String create(UserEntity userEntity){
         //jwt토큰 만료 시간을 현재 시각으로부터 1일 뒤 만료되는 날짜로 계산
@@ -25,10 +30,10 @@ public class TokenProvider {
         //jwt토큰 생성
         return Jwts.builder()
                 //header에 들어갈 내용 및 서명하기 위한 SECRET_KEY
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
                 //payload
                 .setSubject(String.valueOf(userEntity.getId())) //sub:토큰 제목(여기선 userId)
-                .setIssuer("demo app")//iss:토큰 발급자
+                .setIssuer(jwtProperties.getIssuer())//iss:토큰 발급자
                 .setIssuedAt(new Date()) //iat : 토큰이 발급된 시간
                 .setExpiration(expiryDate) //exp: 토큰 만료 시간
                 .compact();//토큰 생성 "header.payload.signature"토큰 문자열 최종 생성
@@ -42,7 +47,7 @@ public class TokenProvider {
         //서명이 위조되거나 만료된 토큰이라면 예외 발생
         //위조되지 않았다면 페이로드(claims) 리턴
         Claims claims = Jwts.parser()
-                .setSigningKey(SECRET_KEY) //서명 검증에 사용할 비밀키 지정
+                .setSigningKey(jwtProperties.getSecretKey()) //서명 검증에 사용할 비밀키 지정
                 .parseClaimsJws(token)//jwt 파싱 > h,p,s검증
                 .getBody();
         return claims.getSubject();//jwt 생성 시 넣었던 sub(setId)값을 꺼냄

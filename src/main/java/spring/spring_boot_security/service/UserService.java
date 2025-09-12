@@ -2,6 +2,7 @@ package spring.spring_boot_security.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import spring.spring_boot_security.entity.UserEntity;
 import spring.spring_boot_security.repository.UserRepository;
@@ -30,8 +31,21 @@ public class UserService {
     }
 
     //인증 : 이메일과 비번으로 사용자 조회
-    public UserEntity getByCredentials(final String email, final String password){
-        //db에서 해당 정보가 일치하는 유저가 있는지 조회
-        return repository.findByEmailAndPassword(email, password);
+//    public UserEntity getByCredentials(final String email, final String password){
+//        //db에서 해당 정보가 일치하는 유저가 있는지 조회
+//        return repository.findByEmailAndPassword(email, password);
+//    }
+
+    //[after] 패스워드 암호화 적용 후
+    public UserEntity getByCredentials(final String email, final String password
+                                        , final PasswordEncoder encoder){
+        final UserEntity originalUser = repository.findByEmail(email);
+        if(originalUser !=null && encoder.matches(password, originalUser.getPassword())){
+            //password : 클라이언트가 주장하는 현재 유저에 대한 비밀번호
+            //originalUser.getPassword():DB에 저장된 정답 비밀번호
+            return originalUser;
+        }
+        return null;
     }
+
 }

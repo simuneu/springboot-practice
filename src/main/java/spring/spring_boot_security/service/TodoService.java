@@ -50,7 +50,6 @@ public class TodoService {
         entity.setId(dto.getId());
         entity.setTitle(dto.getTitle());
         entity.setDone(dto.isDone());
-        validate(entity);
 
         //orElseThrow - 값이 존재하지 않을 때 지정한 예외를 발생시키는 역할
         TodoEntity oEntity = repository.findById(entity.getId())

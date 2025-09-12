@@ -14,6 +14,7 @@ import spring.spring_boot_security.service.TodoService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/todo")
@@ -55,11 +56,13 @@ public class TodoController {
             List<TodoEntity> entities = service.create(entity);
 
             //5. return된 엔티티 리스트를 TodoDTO로 변환
-            List<TodoDTO> dtos =  new ArrayList<>();
-            for(TodoEntity tEntity :entities){
-                TodoDTO tDto = new TodoDTO(tEntity);
-                dtos.add(tDto);
-            }
+//            List<TodoDTO> dtos =  new ArrayList<>();
+//            for(TodoEntity tEntity :entities){
+//                TodoDTO tDto = new TodoDTO(tEntity);
+//                dtos.add(tDto);
+//            }
+            //스트림을 이용한 코드
+            List<TodoDTO> dtos =  entities.stream().map(TodoDTO::new).collect(Collectors.toList());
 
             //6. 변환된 todoDTO 리스트를 이용해 ResponseDTO초기화
             //TodoDTO타입을 담는 ResponseDTO객체를 빌드하겠습니다. 라는 의미
