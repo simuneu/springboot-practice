@@ -18,6 +18,7 @@ public class ArticleResponseDTO {
     private String title;
     private String description;
     private Float score; //검색어와의 연관성을 나타내는 수치로 값이 높을수록 관련성이 높음
+    private int age;
 
     //Entity > DTO변환하는 정적 팩토리 메서드
     //정적 팩토리 메서드 ?  디자인 패턴 중 한 종류

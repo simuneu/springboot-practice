@@ -28,8 +28,10 @@ public class Article {
     private  String description;
     
     @TextScore //MongoDB 텍스트 검색시 자동으로 계산되는 점수
-    //검색어와의 관련성을 나타내는 수치(높을수록 관련성이 높음)
+    //검색어와의 관련성을 나타내는 수치(높을수록 관련성이 높음)z
     //실제 데이터베이스에는 저장되지 않고, 검색 시에만 계산됨
     //검색 결과 정렬이나 필터링할 때 좋음
     private  Float score;
+
+    private int age;
 }

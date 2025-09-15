@@ -56,11 +56,18 @@ public interface ArticleRepository extends MongoRepository<Article, String> {
     //정규식 기반의 패턴 매칭
     List<Article> findByNameLike(String name);
 
-    
+
+    //나이대별 조회
+    List<Article> findByAgeBetween(int from, int to);
+
+    //나이대별+이름순 정렬
+    List<Article> findByAgeBetweenOrderByNameAsc(int from, int to, Sort sort);
+
+
     //===커스텀 쿼리
     @Query("{name:?0}") //검색조건 : name이 첫 번째 매개변수와 일치
     @Update("{$set: {email: ?1}}") //@Update : MongoDB의 업데이트 쿼리 작성, email필드 두 번째 매개변수 설정($set은 필드값을 설정하는 연산자)
     int updateEmailByName(String name, String email); //반환값 int ? 일괄 업데이트된 문서 개수
     
-        
+
 }

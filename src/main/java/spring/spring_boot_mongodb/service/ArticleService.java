@@ -134,4 +134,16 @@ public class ArticleService {
         log.info("Updating email for name:{} to {}", name, email);
         return articleRepository.updateEmailByName(name, email);
     }
+
+    //=======나이대 조회=========
+    public List<Article> findByAgeBetween(int from, int to){
+        log.info("Find article by from:{} to:{} ", from, to);
+        return articleRepository.findByAgeBetween(from-1, to+1);
+    }
+
+    //나이+이름
+    public List<Article> findByAgeBetweenOrderByNameAsc(int from, int to, Sort sort){
+        log.info("Find article by from:{} to:{}  and sort{}", from, to, sort);
+        return articleRepository.findByAgeBetweenOrderByNameAsc(from-1, to+1, sort);
+    }
 }

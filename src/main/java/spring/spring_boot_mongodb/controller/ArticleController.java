@@ -214,4 +214,32 @@ public class ArticleController {
 
         return ResponseEntity.ok(message);
     }
+
+    //나이대별 조회
+    @GetMapping("search/ageGroup")
+    public  ResponseEntity<List<ArticleResponseDTO>> findByAgeBetween(
+            @RequestParam("from") int from,
+            @RequestParam("to") int to
+    ){
+        List<Article> articles = articleService.findByAgeBetween(from, to);
+        List<ArticleResponseDTO> responseDTOS = articles.stream()
+                .map(ArticleResponseDTO::from)
+                .collect(Collectors.toList());
+                return ResponseEntity.ok(responseDTOS);
+    }
+
+    //나이+이름
+    @GetMapping("search/ageGroup-name")
+    public ResponseEntity<List<ArticleResponseDTO>> findByAgeBetweenOrderByNameAsc(
+            @RequestParam("from") int from,
+            @RequestParam("to") int to
+    ){
+        Sort sort = Sort.by(Sort.Direction.ASC, "name");
+
+        List<Article> articles = articleService.findByAgeBetweenOrderByNameAsc(from, to,sort);
+        List<ArticleResponseDTO> responseDTOS = articles.stream()
+                .map(ArticleResponseDTO::from)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responseDTOS);
+    }
 }

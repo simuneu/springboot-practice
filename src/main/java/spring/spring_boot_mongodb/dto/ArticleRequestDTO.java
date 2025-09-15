@@ -15,4 +15,5 @@ public class ArticleRequestDTO {
     private String email;
     private String title;
     private String description;
+    private int age;
 }
