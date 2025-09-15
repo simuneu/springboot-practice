@@ -31,5 +31,5 @@ public class Article {
     //검색어와의 관련성을 나타내는 수치(높을수록 관련성이 높음)
     //실제 데이터베이스에는 저장되지 않고, 검색 시에만 계산됨
     //검색 결과 정렬이나 필터링할 때 좋음
-    private  String score;
+    private  Float score;
 }

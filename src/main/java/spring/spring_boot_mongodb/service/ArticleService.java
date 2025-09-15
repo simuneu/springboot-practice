@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Service;
 import spring.spring_boot_mongodb.model.Article;
 import spring.spring_boot_mongodb.repository.ArticleRepository;
@@ -44,7 +46,7 @@ public class ArticleService {
     //Pageable : 페이징 정보(페이지 번호, 크기, 정렬)
     //Page<T> : 페이징된 결과랑 메타 데이터 포함
     //필요한 만큼만 데이터를 로드하기에 메모리 효율성
-    public Page<Article> getAllArticle(Pageable pageable){
+    public Page<Article> getAllArticles(Pageable pageable){
         log.info("Getting all articles with pagination: {}", pageable);
         return articleRepository.findAll(pageable);
     }
@@ -71,6 +73,19 @@ public class ArticleService {
 
 
     //====================================검색관련================================================
+    //텍스트 검색(사용자 정의 정렬)
+    public List<Article> searchArticleWithTextCriteria(String keyword, Sort sort){
+        log.info("Searching articles with keyword:{} and sort{}", keyword, sort);
+        TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(keyword);
+        //TextCriteria :Spring data MongoDB 에서 텍스트 검색을 위해 사용하는 객체
+        //forDefaultLanguage : MongoDB의 기본 언어를 사용
+        //matchingAny : 해당 키워드가 텍스트 인덱스가 걸린 필드 중 하나라도 포함되면 검색
+        return articleRepository.findBy(criteria, sort);
+    }
+
+    //
+
+
     //====================================필드별 검색 메서드================================================
     //이름으로 정확한 매칭 검색
     public List<Article> findByName(String name){
